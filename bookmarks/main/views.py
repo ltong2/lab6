@@ -12,15 +12,17 @@ def index(request):
     links=Link.objects.all()
     return render_to_response('main/index.html',{'links':links},context)
 def tags(request):
-    context= RequestContext(request)
-    tags =Tags.object.all()
-    return render_to_response('main/tags.html',{'tags':tags},context)
-    
-def tag(request):
-    context= RequestContext(request)
-    the_tag =Tag.object.get(name=tag_name)
-    links= the_tag.link_set.all()
-    return render_to_response('main/index.html',{'links':links,'tag_name':'#'+tag_name},context)    
+    context = RequestContext(request)
+    tags = Tag.objects.all()
+    return render_to_response('main/tags.html', {'tags': tags}, context)
+
+
+def tag(request, tag_name):
+    context = RequestContext(request)
+    the_tag = Tag.objects.get(name=tag_name)
+    links = the_tag.link_set.all()
+    return render_to_response('main/index.html', {'links': links, 'tag_name':'#' + tag_name}, context)
+
 def add_link(request):
     context= RequestContext(request)
     if request.method=='POST':
@@ -29,7 +31,7 @@ def add_link(request):
         title =request.POST.get("title","")
     try:
         l = Link.objects.create(title=title, url=url)
-    except DatabaseError:
+    except:
         return redirect(index)
     print tags
     tagA = tags.split(r'; |, ')   
